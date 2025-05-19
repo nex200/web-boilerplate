@@ -6,6 +6,7 @@ import {
 } from 'next/server';
 import createMiddleware from 'next-intl/middleware';
 
+import { Env } from './libs/Env';
 import { AllLocales, AppConfig } from './utils/AppConfig';
 
 const intlMiddleware = createMiddleware({
@@ -46,9 +47,11 @@ export default function middleware(
       }
 
       const authObj = await auth();
+      const organizationEnabled = Env.ORGANIZATION_ENABLED === 'true';
 
       if (
-        authObj.userId
+        organizationEnabled
+        && authObj.userId
         && !authObj.orgId
         && req.nextUrl.pathname.includes('/dashboard')
         && !req.nextUrl.pathname.endsWith('/organization-selection')

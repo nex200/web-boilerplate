@@ -14,6 +14,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Separator } from '@/components/ui/separator';
+import { Env } from '@/libs/Env';
 import { Logo } from '@/templates/Logo';
 import { getI18nPath } from '@/utils/Helpers';
 
@@ -24,6 +25,12 @@ export const DashboardHeader = (props: {
   }[];
 }) => {
   const locale = useLocale();
+  // 修改这里，确保将字符串转换为布尔值
+  const organizationEnabled = Env.NEXT_PUBLIC_ORGANIZATION_ENABLED === 'true';
+  if (process.env.NODE_ENV === 'development') {
+    // eslint-disable-next-line no-console
+    console.log('org enable', organizationEnabled);
+  }
 
   return (
     <>
@@ -32,33 +39,37 @@ export const DashboardHeader = (props: {
           <Logo />
         </Link>
 
-        <svg
-          className="size-8 stroke-muted-foreground max-sm:hidden"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          fill="none"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <path stroke="none" d="M0 0h24v24H0z" />
-          <path d="M17 5 7 19" />
-        </svg>
+        {organizationEnabled && (
+          <>
+            <svg
+              className="size-8 stroke-muted-foreground max-sm:hidden"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path stroke="none" d="M0 0h24v24H0z" />
+              <path d="M17 5 7 19" />
+            </svg>
 
-        <OrganizationSwitcher
-          organizationProfileMode="navigation"
-          organizationProfileUrl={getI18nPath(
-            '/dashboard/organization-profile',
-            locale,
-          )}
-          afterCreateOrganizationUrl="/dashboard"
-          hidePersonal
-          skipInvitationScreen
-          appearance={{
-            elements: {
-              organizationSwitcherTrigger: 'max-w-28 sm:max-w-52',
-            },
-          }}
-        />
+            <OrganizationSwitcher
+              organizationProfileMode="navigation"
+              organizationProfileUrl={getI18nPath(
+                '/dashboard/organization-profile',
+                locale,
+              )}
+              afterCreateOrganizationUrl="/dashboard"
+              hidePersonal
+              skipInvitationScreen
+              appearance={{
+                elements: {
+                  organizationSwitcherTrigger: 'max-w-28 sm:max-w-52',
+                },
+              }}
+            />
+          </>
+        )}
 
         <nav className="ml-3 max-lg:hidden">
           <ul className="flex flex-row items-center gap-x-3 text-lg font-medium [&_a:hover]:opacity-100 [&_a]:opacity-75">
