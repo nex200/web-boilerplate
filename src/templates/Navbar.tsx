@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
+import { SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
 
 import { LocaleSwitcher } from '@/components/LocaleSwitcher';
 import { buttonVariants } from '@/components/ui/buttonVariants';
@@ -21,6 +22,7 @@ export const Navbar = () => {
             <li data-fade>
               <LocaleSwitcher />
             </li>
+            <SignedOut>
             <li className="ml-1 mr-2.5" data-fade>
               <Link href="/sign-in">{t('sign_in')}</Link>
             </li>
@@ -29,6 +31,20 @@ export const Navbar = () => {
                 {t('sign_up')}
               </Link>
             </li>
+            </SignedOut>
+            <SignedIn>
+              <li>
+                <UserButton
+                  userProfileMode="navigation"
+                  userProfileUrl="/dashboard/user-profile"
+                  appearance={{
+                    elements: {
+                      rootBox: 'px-2 py-1.5',
+                    },
+                  }}
+                />
+              </li>
+            </SignedIn>
           </>
         )}
       >

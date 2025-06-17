@@ -5,7 +5,7 @@ import { ClerkProvider } from '@clerk/nextjs';
 
 import { AppConfig } from '@/utils/AppConfig';
 
-export default function AuthLayout(props: {
+export default function HomeLayout(props: {
   children: React.ReactNode;
   params: { locale: string };
 }) {
@@ -30,7 +30,6 @@ export default function AuthLayout(props: {
 
   return (
     <ClerkProvider
-      // PRO: Dark mode support for Clerk
       localization={clerkLocale}
       signInUrl={signInUrl}
       signUpUrl={signUpUrl}

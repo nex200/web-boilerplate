@@ -28,12 +28,9 @@ export default function middleware(
   request: NextRequest,
   event: NextFetchEvent,
 ) {
-  if (
-    request.nextUrl.pathname.includes('/sign-in')
-    || request.nextUrl.pathname.includes('/sign-up')
-    || isProtectedRoute(request)
-  ) {
+  // 对所有路由应用 clerkMiddleware，但只保护特定路由
     return clerkMiddleware(async (auth, req) => {
+    // 只保护特定路由
       if (isProtectedRoute(req)) {
         const locale
           = req.nextUrl.pathname.match(/(\/.*)\/dashboard/)?.at(1) ?? '';
@@ -41,7 +38,6 @@ export default function middleware(
         const signInUrl = new URL(`${locale}/sign-in`, req.url);
 
         await auth.protect({
-          // `unauthenticatedUrl` is needed to avoid error: "Unable to find `next-intl` locale because the middleware didn't run on this request"
           unauthenticatedUrl: signInUrl.toString(),
         });
       }
@@ -66,11 +62,8 @@ export default function middleware(
 
       return intlMiddleware(req);
     })(request, event);
-  }
-
-  return intlMiddleware(request);
 }
 
 export const config = {
-  matcher: ['/((?!.+\\.[\\w]+$|_next|monitoring).*)', '/', '/(api|trpc)(.*)'], // Also exclude tunnelRoute used in Sentry from the matcher
+  matcher: ['/((?!.+\\.[\\w]+$|_next|monitoring).*)', '/(api|trpc)(.*)'], // Also exclude tunnelRoute used in Sentry from the matcher
 };
