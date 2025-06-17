@@ -25,7 +25,6 @@ export const DashboardHeader = (props: {
   }[];
 }) => {
   const locale = useLocale();
-  // 修改这里，确保将字符串转换为布尔值
   const organizationEnabled = Env.NEXT_PUBLIC_ORGANIZATION_ENABLED === 'true';
   if (process.env.NODE_ENV === 'development') {
     // eslint-disable-next-line no-console
